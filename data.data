@@ -1,6 +1,7 @@
-SET A 100
+SET A 50
 SET B 100
-SET D 100
+SET D 50
 SET BB 25
 SET EE 50
-SET T 60
+SET world Hello_world
+SET T 65

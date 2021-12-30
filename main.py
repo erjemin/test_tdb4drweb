@@ -5,13 +5,14 @@
 # ___________________Дракон_приземлился_на_поле_–_поздно_считать,_что_ты_спишь
 #
 import sys
-import re
 from tdb import TransDB
 
 
 if __name__ == '__main__':
     # инициализируем БД t_db (база ключей с транзакциями)
     t_db = TransDB()
+
+    # ----------- Читаем дамп предыдущей сессии (если он задан)
     # считываем аргумент командной строки (имя файла дампа)
     if len(sys.argv) > 1:
         # если аргумент есть, то загружаем дамп предыдущей сессии
@@ -32,18 +33,20 @@ if __name__ == '__main__':
             # не удалось прочитать дамп (ещё не создан или занят)
             pass
     else:
-        file_name = "tdb_dump.data"
-    # узнаём версию PYthon, в которой работаем
-    i_py_ver = int(sys.version[0])
+        file_name = "tdb_dump_default.data"
     sz_command = ""
-    # Получаем ввод команд
+    # узнаём версию Python, в которой работаем
+    i_py_ver = int(sys.version[0])
+
+    # ----------- Получаем ввод команд
     while "END" != sz_command.upper().strip():
         if i_py_ver == 2:       # для Python 2.x
             sz_command = str(raw_input())
         else:                   # для Python 3.x
             sz_command = str(input())
-        t_db.cmd(sz_command.strip())
-    # записываем завершающий дамп состояния
+        t_db.cmd(sz_command.lstrip())
+
+    # ----------- Записываем завершающий дамп состояния
     try:
         with open(file_name, "w") as file_dump:
             for dict_i in t_db.db:
